@@ -1,0 +1,256 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block title %}{{ title }} | TaskVibe Administration{% endblock %}
+
+{% block extrastyle %}
+<style>
+    :root {
+        --primary: #8B5CF6;
+        --secondary: #A855F7;
+        --accent: #C084FC;
+        --primary-fg: #ffffff;
+        --header-color: #1e293b;
+        --link-fg: #8B5CF6;
+        --link-hover-color: #7C3AED;
+        --link-selected-fg: #ffffff;
+        --button-hover-bg: #7C3AED;
+        --button-fg: #ffffff;
+        --button-bg: #8B5CF6;
+    }
+
+    #header {
+        background: linear-gradient(135deg, #8B5CF6, #A855F7, #C084FC);
+        color: var(--primary-fg);
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    #branding h1 {
+        font-weight: 600;
+        font-size: 1.5rem;
+    }
+
+    .module h2, .module caption, .inline-group h2 {
+        background: linear-gradient(135deg, #8B5CF6, #A855F7, #C084FC);
+        color: var(--primary-fg);
+        border-radius: 8px 8px 0 0;
+    }
+
+    .button, input[type=submit], input[type=button], .submit-row input, a.button {
+        background: var(--button-bg);
+        color: var(--button-fg);
+        border-radius: 6px;
+        border: none;
+        padding: 8px 16px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .button:hover, input[type=submit]:hover, input[type=button]:hover, .submit-row input:hover, a.button:hover {
+        background: var(--button-hover-bg);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .button.default, input[type=submit].default, .submit-row input.default {
+        background: var(--accent);
+    }
+
+    .button.default:hover, input[type=submit].default:hover, .submit-row input.default:hover {
+        background: #A855F7;
+    }
+
+    .object-tools a:link, .object-tools a:visited {
+        background: var(--button-bg);
+        color: var(--button-fg);
+        border-radius: 6px;
+        padding: 8px 16px;
+        font-weight: 500;
+        transition: all 0.2s ease;
+    }
+
+    .object-tools a:hover {
+        background: var(--button-hover-bg);
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    .object-tools a.addlink {
+        background: var(--accent);
+    }
+
+    .object-tools a.addlink:hover {
+        background: #A855F7;
+    }
+
+    #content-related .module h2 {
+        background: var(--header-color);
+        color: var(--primary-fg);
+    }
+
+    .selector-chosen h2 {
+        background: var(--primary);
+        color: var(--primary-fg);
+    }
+
+    .calendar td.selected a {
+        background: var(--primary);
+    }
+
+    .calendar td a:focus, .timelist a:focus,
+    #content .calendar td a:focus, #content .timelist a:focus {
+        background: var(--primary);
+    }
+
+    .form-row {
+        padding: 12px 0;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .form-row:last-child {
+        border-bottom: none;
+    }
+
+    .form-row label {
+        font-weight: 600;
+        color: var(--header-color);
+    }
+
+    .help {
+        color: #6b7280;
+        font-size: 0.875rem;
+        margin-top: 4px;
+    }
+
+    .aligned .form-row input {
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        padding: 8px 12px;
+        transition: border-color 0.2s ease;
+    }
+
+    .aligned .form-row input:focus {
+        border-color: var(--primary);
+        outline: none;
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+    }
+
+    .results {
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .results thead th {
+        background: var(--header-color);
+        color: var(--primary-fg);
+        font-weight: 600;
+    }
+
+    .results tbody tr:hover {
+        background-color: #f8fafc;
+    }
+
+    .paginator {
+        margin: 20px 0;
+        text-align: center;
+    }
+
+    .paginator a:link, .paginator a:visited {
+        background: var(--button-bg);
+        color: var(--button-fg);
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 0 2px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+    .paginator a:hover {
+        background: var(--button-hover-bg);
+        transform: translateY(-1px);
+    }
+
+    .paginator .this-page {
+        background: #A855F7;
+        color: var(--button-fg);
+        padding: 8px 12px;
+        border-radius: 6px;
+        margin: 0 2px;
+    }
+
+    /* Custom dashboard styling */
+    .dashboard .module table th {
+        width: 100%;
+    }
+
+    .dashboard .module table td {
+        white-space: nowrap;
+    }
+
+    /* Status indicators */
+    .status-completed {
+        color: #8B5CF6;
+        font-weight: 600;
+    }
+
+    .status-pending {
+        color: #d97706;
+        font-weight: 600;
+    }
+
+    .status-overdue {
+        color: #dc2626;
+        font-weight: 600;
+    }
+
+    /* Priority indicators */
+    .priority-high {
+        color: #dc2626;
+        font-weight: 600;
+    }
+
+    .priority-medium {
+        color: #d97706;
+        font-weight: 600;
+    }
+
+    .priority-low {
+        color: #8B5CF6;
+        font-weight: 600;
+    }
+
+    /* Responsive design */
+    @media (max-width: 767px) {
+        #header {
+            padding: 10px 16px;
+        }
+        
+        #branding h1 {
+            font-size: 1.25rem;
+        }
+        
+        .form-row {
+            padding: 8px 0;
+        }
+        
+        .aligned .form-row input {
+            width: 100%;
+            margin-top: 4px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">
+    <span style="display: flex; align-items: center; gap: 8px;">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12L11 14L15 10M21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3C16.9706 3 21 7.02944 21 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        TaskVibe Administration
+    </span>
+</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %} 

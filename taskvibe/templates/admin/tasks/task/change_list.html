@@ -1,0 +1,40 @@
+{% extends "admin/change_list.html" %}
+{% load i18n admin_urls static admin_list %}
+
+{% block content_title %}
+<h1>Task Management</h1>
+<div style="margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, #f8fafc, #e2e8f0); border-radius: 8px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+        <div style="text-align: center; padding: 10px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="font-size: 20px; font-weight: bold; color: #6366f1;">{{ cl.queryset.count }}</div>
+            <div style="font-size: 12px; color: #6b7280;">Total Tasks</div>
+        </div>
+        <div style="text-align: center; padding: 10px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="font-size: 20px; font-weight: bold; color: #10b981;">{{ cl.queryset.filter.completed=True.count }}</div>
+            <div style="font-size: 12px; color: #6b7280;">Completed</div>
+        </div>
+        <div style="text-align: center; padding: 10px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="font-size: 20px; font-weight: bold; color: #f59e0b;">{{ cl.queryset.filter.completed=False.count }}</div>
+            <div style="font-size: 12px; color: #6b7280;">Pending</div>
+        </div>
+        <div style="text-align: center; padding: 10px; background: white; border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <div style="font-size: 20px; font-weight: bold; color: #ef4444;">{{ cl.queryset.filter.completed=False.due_date__lt=now.count }}</div>
+            <div style="font-size: 12px; color: #6b7280;">Overdue</div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block object-tools-items %}
+    {{ block.super }}
+    <li>
+        <a href="{% url 'admin:tasks_task_add' %}" class="addlink" style="background: #06b6d4;">
+            <span style="display: flex; align-items: center; gap: 5px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Quick Add Task
+            </span>
+        </a>
+    </li>
+{% endblock %} 

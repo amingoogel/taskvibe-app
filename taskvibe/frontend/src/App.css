@@ -1,0 +1,100 @@
+body {
+  background-color: #f3f4f6;
+  margin: 0;
+  padding: 0;
+  font-family: 'Vazirmatn', 'Roboto', Arial, sans-serif;
+}
+
+body.dark {
+  background-color: #18181b;
+  color: #f3f4f6;
+}
+
+/* حذف استایل‌های اضافی کارت و استفاده از MUI */
+.card {
+  /* حذف استایل کارت قدیمی */
+  background-color: #fff;
+  border-radius: 1rem;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+  padding: 1.5rem;
+}
+
+body.dark .card {
+  background-color: #27272a;
+  color: #f3f4f6;
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 0.5rem !important;
+  }
+  .MuiBox-root {
+    padding: 0.5rem !important;
+  }
+  .MuiTypography-root {
+    font-size: 1rem !important;
+  }
+}
+
+/* Dark mode styles for react-big-calendar */
+body.dark .rbc-calendar {
+  background-color: #27272a;
+  color: #f3f4f6;
+}
+
+body.dark .rbc-header {
+  background-color: #1e293b;
+  color: #f3f4f6;
+  border-color: #374151;
+}
+
+body.dark .rbc-month-view {
+  background-color: #27272a;
+  border-color: #374151;
+}
+
+body.dark .rbc-day-bg {
+  background-color: #27272a;
+  border-color: #374151;
+}
+
+body.dark .rbc-off-range-bg {
+  background-color: #1f2937;
+}
+
+body.dark .rbc-off-range {
+  color: #6b7280;
+}
+
+body.dark .rbc-today {
+  background-color: #374151;
+}
+
+body.dark .rbc-event {
+  background-color: #8B5CF6;
+  color: white;
+}
+
+body.dark .rbc-event.rbc-selected {
+  background-color: #A855F7;
+}
+
+body.dark .rbc-toolbar {
+  background-color: #27272a;
+  color: #f3f4f6;
+}
+
+body.dark .rbc-toolbar button {
+  background-color: #374151;
+  color: #f3f4f6;
+  border-color: #4b5563;
+}
+
+body.dark .rbc-toolbar button:hover {
+  background-color: #4b5563;
+}
+
+body.dark .rbc-toolbar button.rbc-active {
+  background-color: #8B5CF6;
+  color: white;
+}

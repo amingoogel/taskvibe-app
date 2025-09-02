@@ -1,0 +1,168 @@
+{% extends "admin/change_form.html" %}
+{% load i18n admin_urls static admin_modify %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <style>
+        .task-form-container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .task-form-header {
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .task-form-header h1 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .task-form-content {
+            padding: 20px;
+        }
+        
+        .fieldset {
+            margin-bottom: 20px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+        
+        .fieldset h2 {
+            background: #f8fafc;
+            margin: 0;
+            padding: 12px 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #374151;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .fieldset-content {
+            padding: 16px;
+        }
+        
+        .form-row {
+            margin-bottom: 16px;
+        }
+        
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+        
+        .form-row label {
+            display: block;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 4px;
+        }
+        
+        .form-row input,
+        .form-row select,
+        .form-row textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+        
+        .form-row input:focus,
+        .form-row select:focus,
+        .form-row textarea:focus {
+            outline: none;
+            border-color: #6366f1;
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
+        }
+        
+        .priority-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .priority-high {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+        
+        .priority-medium {
+            background: #fffbeb;
+            color: #d97706;
+        }
+        
+        .priority-low {
+            background: #f0fdf4;
+            color: #059669;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-completed {
+            background: #f0fdf4;
+            color: #059669;
+        }
+        
+        .status-pending {
+            background: #fffbeb;
+            color: #d97706;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+<div class="task-form-container">
+    <div class="task-form-header">
+        <h1>
+            {% if original %}
+                Edit Task: {{ original.title }}
+            {% else %}
+                Create New Task
+            {% endif %}
+        </h1>
+    </div>
+    
+    <div class="task-form-content">
+        {{ block.super }}
+    </div>
+</div>
+{% endblock %}
+
+{% block field_sets %}
+    {% for fieldset in adminform %}
+        <div class="fieldset">
+            <h2>{{ fieldset.name|default:"Task Information" }}</h2>
+            <div class="fieldset-content">
+                {% for line in fieldset %}
+                    {% for field in line %}
+                        <div class="form-row">
+                            {{ field.errors }}
+                            {{ field.label_tag }}
+                            {{ field }}
+                            {% if field.help_text %}
+                                <p class="help">{{ field.help_text }}</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %} 

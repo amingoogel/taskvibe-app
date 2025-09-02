@@ -1,0 +1,157 @@
+{% extends "admin/index.html" %}
+{% load i18n %}
+
+{% block content %}
+<div id="content-main">
+    {% if app_list %}
+        {% for app in app_list %}
+            <div class="app-{{ app.app_label }} module{% if app.app_url in request.path %} current-app{% endif %}">
+                <table>
+                    <caption>
+                        <a href="{{ app.app_url }}" class="section" title="{% blocktranslate with name=app.name %}Models in the {{ name }} application{% endblocktranslate %}">
+                            {{ app.name }}
+                        </a>
+                    </caption>
+                    {% for model in app.models %}
+                        <tr class="model-{{ model.object_name|lower }}{% if model.admin_url in request.path %} current-model{% endif %}">
+                            {% if model.admin_url %}
+                                <th scope="row">
+                                    <a href="{{ model.admin_url }}"{% if model.admin_url in request.path %} aria-current="page"{% endif %}>
+                                        {{ model.name }}
+                                    </a>
+                                </th>
+                            {% else %}
+                                <th scope="row">{{ model.name }}</th>
+                            {% endif %}
+
+                            {% if model.add_url %}
+                                <td>
+                                    <a href="{{ model.add_url }}" class="addlink">
+                                        {% translate 'Add' %}
+                                    </a>
+                                </td>
+                            {% else %}
+                                <td>&nbsp;</td>
+                            {% endif %}
+
+                            {% if model.admin_url and show_changelinks %}
+                                {% if model.view_only %}
+                                    <td>&nbsp;</td>
+                                {% else %}
+                                    <td>
+                                        <a href="{{ model.admin_url }}" class="changelink">
+                                            {% translate 'Change' %}
+                                        </a>
+                                    </td>
+                                {% endif %}
+                            {% else %}
+                                <td>&nbsp;</td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>{% translate "You don't have permission to view or edit anything." %}</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>{% translate 'Recent actions' %}</h2>
+        {% load log %}
+        {% get_admin_log 10 as admin_log for_user user %}
+        {% if not admin_log %}
+            <p>{% translate 'None available' %}</p>
+        {% else %}
+            <ul class="actionlist">
+                {% for entry in admin_log %}
+                    <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                        {% if entry.is_deletion or not entry.get_admin_url %}
+                            {{ entry.object_repr }}
+                        {% else %}
+                            <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                        {% endif %}
+                        <br>
+                        {% if entry.content_type %}
+                            <span class="mini quiet">
+                                {% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}
+                            </span>
+                        {% else %}
+                            <span class="mini quiet">{% translate 'Unknown content' %}</span>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </div>
+    
+    <!-- Custom Statistics Module -->
+    <div class="module" id="statistics-module">
+        <h2>{% translate 'Quick Statistics' %}</h2>
+        <div style="padding: 10px;">
+            {% load static %}
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #6366f1, #8b5cf6); color: white; border-radius: 8px;">
+                    <div style="font-size: 24px; font-weight: bold;">{{ task_count|default:"0" }}</div>
+                    <div style="font-size: 12px;">Total Tasks</div>
+                </div>
+                <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #06b6d4, #0891b2); color: white; border-radius: 8px;">
+                    <div style="font-size: 24px; font-weight: bold;">{{ user_count|default:"0" }}</div>
+                    <div style="font-size: 12px;">Active Users</div>
+                </div>
+            </div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #10b981, #059669); color: white; border-radius: 8px;">
+                    <div style="font-size: 24px; font-weight: bold;">{{ completed_tasks|default:"0" }}</div>
+                    <div style="font-size: 12px;">Completed</div>
+                </div>
+                <div style="text-align: center; padding: 15px; background: linear-gradient(135deg, #f59e0b, #d97706); color: white; border-radius: 8px;">
+                    <div style="font-size: 24px; font-weight: bold;">{{ pending_tasks|default:"0" }}</div>
+                    <div style="font-size: 12px;">Pending</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Actions Module -->
+    <div class="module" id="quick-actions-module">
+        <h2>{% translate 'Quick Actions' %}</h2>
+        <div style="padding: 10px;">
+            <div style="margin-bottom: 10px;">
+                <a href="{% url 'admin:tasks_task_add' %}" class="button" style="display: block; text-align: center; margin-bottom: 8px;">
+                    <span style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 5V19M5 12H19" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Add New Task
+                    </span>
+                </a>
+            </div>
+            <div style="margin-bottom: 10px;">
+                <a href="{% url 'admin:tasks_group_add' %}" class="button" style="display: block; text-align: center; margin-bottom: 8px;">
+                    <span style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M17 21V19C17 17.9391 16.5786 16.9217 15.8284 16.1716C15.0783 15.4214 14.0609 15 13 15H5C3.93913 15 2.92172 15.4214 2.17157 16.1716C1.42143 16.9217 1 17.9391 1 19V21M23 21V19C22.9993 18.1137 22.7044 17.2528 22.1614 16.5523C21.6184 15.8519 20.8581 15.3516 20 15.13M16 3.13C16.8604 3.35031 17.623 3.85071 18.1676 4.55232C18.7122 5.25392 19.0078 6.11683 19.0078 7.005C19.0078 7.89317 18.7122 8.75608 18.1676 9.45768C17.623 10.1593 16.8604 10.6597 16 10.88M13 7C13 9.20914 11.2091 11 9 11C6.79086 11 5 9.20914 5 7C5 4.79086 6.79086 3 9 3C11.2091 3 13 4.79086 13 7Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Create Group
+                    </span>
+                </a>
+            </div>
+            <div>
+                <a href="{% url 'admin:tasks_challenge_add' %}" class="button" style="display: block; text-align: center;">
+                    <span style="display: flex; align-items: center; justify-content: center; gap: 5px;">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 12L11 14L15 10M7.835 4.697C8.287 4.223 8.889 3.999 9.5 4C10.111 3.999 10.713 4.223 11.165 4.697L12 5.5L12.835 4.697C13.287 4.223 13.889 3.999 14.5 4C15.111 3.999 15.713 4.223 16.165 4.697L17 5.5V19C17 19.5304 16.7893 20.0391 16.4142 20.4142C16.0391 20.7893 15.5304 21 15 21H9C8.46957 21 7.96086 20.7893 7.58579 20.4142C7.21071 20.0391 7 19.5304 7 19V5.5L7.835 4.697Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        Start Challenge
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %} 

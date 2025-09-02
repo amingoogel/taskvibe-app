@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کد تایید TaskVibe</title>
+    <style>
+        body {
+            font-family: 'Tahoma', 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            direction: rtl;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        .content {
+            padding: 40px 30px;
+            text-align: center;
+        }
+        .verification-code {
+            background-color: #f8f9fa;
+            border: 2px dashed #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 30px 0;
+            font-size: 32px;
+            font-weight: bold;
+            color: #667eea;
+            letter-spacing: 5px;
+        }
+        .message {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+            color: #856404;
+            font-size: 14px;
+        }
+        .footer {
+            background-color: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TaskVibe</h1>
+            <p>کد تایید ثبت نام</p>
+        </div>
+        
+        <div class="content">
+            <p class="message">
+                سلام!<br>
+                برای تکمیل ثبت نام در TaskVibe، لطفاً روی لینک زیر کلیک کنید:
+            </p>
+            
+            <div style="text-align: center; margin: 30px 0;">
+                <a href="{{ verification_url }}" 
+                   style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); 
+                          color: white; 
+                          padding: 15px 30px; 
+                          text-decoration: none; 
+                          border-radius: 8px; 
+                          font-weight: bold; 
+                          display: inline-block;">
+                    تایید ایمیل
+                </a>
+            </div>
+            
+            <p class="message">
+                این لینک تا ۲۴ ساعت معتبر است.
+            </p>
+            
+            <div class="warning">
+                ⚠️ این ایمیل به صورت خودکار ارسال شده است. لطفاً به آن پاسخ ندهید.
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>TaskVibe - مدیریت کارآمد وظایف روزانه</p>
+            <p>اگر شما درخواست این کد را نداده‌اید، لطفاً این ایمیل را نادیده بگیرید.</p>
+        </div>
+    </div>
+</body>
+</html> 
